@@ -7,5 +7,6 @@ namespace Project_66bit.Interfaces
     {
         IEnumerable<Category> AllCategories { get; }
         IEnumerable<Category> GetCategoriesByType(int typeId);
+        Category GetCategoryById(int categoryId);
     }
 }

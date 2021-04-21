@@ -16,6 +16,8 @@ namespace Project_66bit.Repositories
         }
 
         public IEnumerable<Category> AllCategories => _db.Categories;
-        public IEnumerable<Category> GetCategoriesByType(int typeId) => _db.Categories.Where(f => f.Id == typeId);
+        public IEnumerable<Category> GetCategoriesByType(int typeId) => _db.Categories.Where(f => f.TypeId == typeId);
+
+        public Category GetCategoryById(int categoryId) => _db.Categories.FirstOrDefault(f => f.Id == categoryId);
     }
 }

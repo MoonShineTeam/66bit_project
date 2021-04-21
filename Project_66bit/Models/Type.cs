@@ -6,6 +6,5 @@ namespace Project_66bit.Models
     {
         public long Id {get; set;}
         public string Name { get; set;  } 
-        public List<Category> Categories { get; set; }
     }
 }

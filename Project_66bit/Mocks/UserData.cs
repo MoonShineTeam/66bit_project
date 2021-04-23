@@ -1,97 +1,14 @@
-using System.Linq;
-using Project_66bit.Contexts;
+﻿using Project_66bit.Contexts;
 using Project_66bit.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Project_66bit.Mocks
 {
-    public static class SampleData
+    public class UserData
     {
-        public static void Initialize(CategoryContext context)
-        {
-            if (!context.Types.Any())
-            {
-                context.Types.AddRange(
-                    new Type
-                    {
-                        Name = "Общие"
-                    },
-                    new Type
-                    {
-                        Name = "Командировки"
-                    },
-                    new Type
-                    {
-                        Name = "Подарки"
-                    },
-                    new Type
-                    {
-                        Name = "Корпоратив"
-                    });
-            }
-
-            context.SaveChanges();
-            if (!context.Categories.Any())
-            {
-                var general = context.Types.FirstOrDefault(f => f.Name == "Общие");
-                var assigments = context.Types.FirstOrDefault(f => f.Name == "Командировки");
-                var corp = context.Types.FirstOrDefault(f => f.Name == "Корпоратив");
-                context.Categories.AddRange(
-                    new Category
-                    {
-                        Name = "Еда",
-                        Type = general
-                    },
-                    new Category
-                    {
-                        Name = "Техника",
-                        Type = general
-                    },
-                    new Category
-                    {
-                        Name = "Билеты",
-                        Type = assigments
-                    },
-                    new Category
-                    {
-                        Name = "Такси",
-                        Type = assigments
-                    },
-                    new Category
-                    {
-                        Name = "Проживание",
-                        Type = assigments
-                    },
-                    new Category
-                    {
-                        Name = "Питание",
-                        Type = assigments
-                    },
-                    new Category
-                    {
-                        Name = "Аренда",
-                        Type = corp
-                    },
-                    new Category
-                    {
-                        Name = "Еда",
-                        Type = corp
-                    },
-                    new Category
-                    {
-                        Name = "Напитки",
-                        Type = corp
-                    },
-                    new Category
-                    {
-                        Name = "Алкоголь",
-                        Type = corp
-                    }
-                );
-            }
-
-            context.SaveChanges();
-        }
-
         public static void Initialize(ExpenseContext context, CategoryContext categories)
         {
             if (!context.Users.Any())
@@ -131,14 +48,14 @@ namespace Project_66bit.Mocks
                     {
                         TotalSum = 0,
                         User = users.FirstOrDefault(f => f.Id == 2)
-                    }, 
+                    },
                     new Bill
                     {
                         TotalSum = 0,
                         User = users.FirstOrDefault(f => f.Id == 3)
                     }
                 );
-                
+
             }
             context.SaveChanges();
 

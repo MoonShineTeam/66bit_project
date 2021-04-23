@@ -24,6 +24,7 @@ namespace Project_66bit
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CategoryContext>();
+            services.AddDbContext<ExpenseContext>();
             services.AddTransient<ICategories, CategoryRepository>();
             services.AddTransient<ITypes, TypeRepository>();
             services.AddControllersWithViews();

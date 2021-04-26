@@ -18,15 +18,17 @@ namespace Project_66bit
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CategoryContext>();
-            services.AddDbContext<ExpenseContext>();
             services.AddTransient<ICategories, CategoryRepository>();
             services.AddTransient<ITypes, TypeRepository>();
+            services.AddTransient<IUsers, UserRepository>();
+            services.AddTransient<IBills, BillRepository>();
+            services.AddTransient<IExpenses, ExpenseRepository>();
             services.AddControllersWithViews();
 
             // In production, the React files will be served from this directory

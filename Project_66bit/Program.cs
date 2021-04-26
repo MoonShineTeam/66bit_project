@@ -29,19 +29,7 @@ namespace Project_66bit
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
                     logger.LogError(ex, "An error occurred seeding the DB");
-                };
-
-                try
-                {
-                    var categoryContext = services.GetRequiredService<CategoryContext>();
-                    var expenseContext = services.GetRequiredService<ExpenseContext>();
-                    UserData.Initialize(expenseContext, categoryContext);
                 }
-                catch (Exception ex)
-                {
-                    var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(ex, "An error occurred seeding the DB");
-                };
             }
             host.Run();
         }

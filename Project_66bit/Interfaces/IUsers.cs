@@ -3,9 +3,9 @@ using Project_66bit.Models;
 
 namespace Project_66bit.Interfaces
 {
-    public interface ITypes
+    public interface IUsers
     {
-        IEnumerable<Type> AllTypes { get; }
-        Type GetTypeById(long typeId);
+        IEnumerable<User> AllUsers { get; }
+        User GetUserById(long id);
     }
 }

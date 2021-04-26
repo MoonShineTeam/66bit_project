@@ -7,6 +7,9 @@ namespace Project_66bit.Contexts
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Type> Types { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Bill> Bills { get; set; }
+        public DbSet<Expense> Expenses { get; set; }
 
         public CategoryContext(DbContextOptions<CategoryContext> options) : base(options)
         {

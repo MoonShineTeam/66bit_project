@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using Project_66bit.Contexts;
 using Project_66bit.Models;
@@ -10,90 +12,67 @@ namespace Project_66bit.Mocks
         {
             if (!context.Types.Any())
             {
-                context.Types.AddRange(
-                    new Type
-                    {
-                        Name = "Общие"
-                    },
-                    new Type
-                    {
-                        Name = "Командировки"
-                    },
-                    new Type
-                    {
-                        Name = "Подарки"
-                    },
-                    new Type
-                    {
-                        Name = "Корпоратив"
-                    });
+                context.Types.AddRange(Types.Select(f => f.Value));
             }
 
             context.SaveChanges();
             if (!context.Categories.Any())
             {
-                var general = context.Types.FirstOrDefault(f => f.Name == "Общие");
-                var assigments = context.Types.FirstOrDefault(f => f.Name == "Командировки");
-                var corp = context.Types.FirstOrDefault(f => f.Name == "Корпоратив");
                 context.Categories.AddRange(
                     new Category
                     {
                         Name = "Еда",
-                        Type = general
+                        Type = Types["Общие"]
                     },
                     new Category
                     {
                         Name = "Техника",
-                        Type = general
+                        Type = Types["Общие"]
                     },
                     new Category
                     {
                         Name = "Билеты",
-                        Type = assigments
+                        Type = Types["Командировки"]
                     },
                     new Category
                     {
                         Name = "Такси",
-                        Type = assigments
+                        Type = Types["Командировки"]
                     },
                     new Category
                     {
                         Name = "Проживание",
-                        Type = assigments
+                        Type = Types["Командировки"]
                     },
                     new Category
                     {
                         Name = "Питание",
-                        Type = assigments
+                        Type = Types["Командировки"]
                     },
                     new Category
                     {
                         Name = "Аренда",
-                        Type = corp
+                        Type = Types["Корпоратив"]
                     },
                     new Category
                     {
                         Name = "Еда",
-                        Type = corp
+                        Type = Types["Корпоратив"]
                     },
                     new Category
                     {
                         Name = "Напитки",
-                        Type = corp
+                        Type = Types["Корпоратив"]
                     },
                     new Category
                     {
                         Name = "Алкоголь",
-                        Type = corp
+                        Type = Types["Корпоратив"]
                     }
                 );
             }
 
             context.SaveChanges();
-        }
-
-        public static void Initialize(ExpenseContext context, CategoryContext categories)
-        {
             if (!context.Users.Any())
             {
                 context.Users.AddRange(
@@ -116,6 +95,7 @@ namespace Project_66bit.Mocks
                         Middlename = null
                     });
             }
+
             context.SaveChanges();
 
             if (!context.Bills.Any())
@@ -131,29 +111,27 @@ namespace Project_66bit.Mocks
                     {
                         TotalSum = 0,
                         User = users.FirstOrDefault(f => f.Id == 2)
-                    }, 
+                    },
                     new Bill
                     {
                         TotalSum = 0,
                         User = users.FirstOrDefault(f => f.Id == 3)
                     }
                 );
-                
+
             }
+
             context.SaveChanges();
 
             if (!context.Expenses.Any())
             {
                 var bills = context.Bills;
-                var general = categories.Types.FirstOrDefault(f => f.Name == "Общие");
-                var assigments = categories.Types.FirstOrDefault(f => f.Name == "Командировки");
-                var corp = categories.Types.FirstOrDefault(f => f.Name == "Корпоратив");
                 context.Expenses.AddRange(
                     new Expense
                     {
                         Bill = bills.FirstOrDefault(f => f.UserId == 1),
-                        Type = general,
-                        Category = categories.Categories.Where(f => f.Type == general).FirstOrDefault(f => f.Id == 1),
+                        Type = Types["Общие"],
+                        Category = context.Categories.FirstOrDefault(f => f.Type == Types["Общие"] && f.Name == "Еда"),
                         Sum = 12300,
                         Paid = 0,
                         Description = "Sample Desctiption for this",
@@ -162,8 +140,8 @@ namespace Project_66bit.Mocks
                     new Expense
                     {
                         Bill = bills.FirstOrDefault(f => f.UserId == 1),
-                        Type = corp,
-                        Category = categories.Categories.Where(f => f.Type == corp).FirstOrDefault(f => f.Name == "Алкоголь"),
+                        Type = Types["Корпоратив"],
+                        Category = context.Categories.FirstOrDefault(f => f.Type == Types["Корпоратив"] && f.Name == "Алкоголь"),
                         Sum = 1300,
                         Paid = 0,
                         Description = "Sample Desctiption for PIVO",
@@ -172,8 +150,9 @@ namespace Project_66bit.Mocks
                     new Expense
                     {
                         Bill = bills.FirstOrDefault(f => f.UserId == 2),
-                        Type = assigments,
-                        Category = categories.Categories.Where(f => f.Type == assigments).FirstOrDefault(f => f.Id == 2),
+                        Type = Types["Командировки"],
+                        Category =
+                            context.Categories.FirstOrDefault(f => f.Type == Types["Командировки"] && f.Name == "Билеты"),
                         Sum = 15236.31,
                         Paid = 236.31,
                         Description = "Sample Desctiption for командировки",
@@ -182,16 +161,41 @@ namespace Project_66bit.Mocks
                     new Expense
                     {
                         Bill = bills.FirstOrDefault(f => f.UserId == 3),
-                        Type = general,
-                        Category = categories.Categories.Where(f => f.Type == general).FirstOrDefault(f => f.Id == 2),
+                        Type = Types["Общие"],
+                        Category = context.Categories.FirstOrDefault(f => f.Type == Types["Общие"] && f.Name == "Техника"),
                         Sum = 322.28,
                         Paid = 0,
-                        Description = "Sample Desctiption for general",
+                        Description = "Sample Description for general",
                         Cheque = "Link to cheque 1"
                     }
-                    );
+                );
+                context.SaveChanges();
             }
-            context.SaveChanges();
+        }
+
+        private static Dictionary<string, Type> _types;
+
+        private static Dictionary<string, Type> Types
+        {
+            get
+            {
+                if (_types != null) return _types;
+                var list = new Type[]
+                {
+                    new() {Name = "Общие"},
+                    new() {Name = "Командировки"},
+                    new() {Name = "Подарки"},
+                    new() {Name = "Корпоратив"}
+                };
+
+                _types = new Dictionary<string, Type>();
+                foreach (var type in list)
+                {
+                    _types.Add(type.Name, type);
+                }
+
+                return _types;
+            }
         }
     }
 }

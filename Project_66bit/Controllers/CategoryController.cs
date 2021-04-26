@@ -4,6 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Project_66bit.Contexts;
+using Project_66bit.Interfaces;
 using Project_66bit.Models;
 using Project_66bit.Repositories;
 using Type = Project_66bit.Models.Type;
@@ -15,36 +16,37 @@ namespace Project_66bit.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ILogger<CategoryController> _logger;
-        private readonly CategoryContext _db;
-        //private readonly CategoryRepository _repo;
+        private readonly ITypes _type;
+        private readonly ICategories _repo;
 
-        public CategoryController(ILogger<CategoryController> logger, CategoryContext db)
+        public CategoryController(ILogger<CategoryController> logger, ICategories categories, ITypes types)
         {
-            _db = db;
+            //_db = db;
+            _type = types;
             _logger = logger;
-            //_repo = catRepo;
+            _repo = categories;
         }
         
         [HttpGet]
         public IEnumerable<Category> All()
         {
-            return _db.Categories;
+            return _repo.AllCategories;
         }
         
         [HttpGet]
-        public Category Id(int id)
+        public Category Id(long id)
         {
-            if (id < 1 || id > _db.Categories.Count())
+            if (id < 1 || id > _repo.AllCategories.Count())
                 throw new Exception("Invalid id");
-            return _db.Categories.FirstOrDefault(f => f.Id == id);
+            return _repo.GetCategoryById(id);
         }
         
         [HttpGet]
-        public IEnumerable<Category> TypeId(int id)
+        public IEnumerable<Category> TypeId(long id)
         {
-            if (id < 1 || id > _db.Types.Count())
+            if (id < 1 || id > _type.AllTypes.Count())
                 throw new Exception("Invalid id");
-            return _db.Categories.Where(f => f.TypeId == id);
+            return _repo.GetCategoriesByType(id);
         }
     }
 }

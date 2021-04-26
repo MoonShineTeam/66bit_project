@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Project_66bit.Contexts;
+using Project_66bit.Interfaces;
 using Project_66bit.Models;
 
 namespace Project_66bit.Controllers
@@ -10,24 +12,21 @@ namespace Project_66bit.Controllers
     public class TypeController : ControllerBase
     {
         private readonly ILogger<CategoryController> _logger;
-        private readonly CategoryContext _db;
+        private readonly ITypes _repo;
         
-        public TypeController(ILogger<CategoryController> logger, CategoryContext db)
+        public TypeController(ILogger<CategoryController> logger, ITypes types)
         {
-            _db = db;
+            _repo = types;
             _logger = logger;
-        }
-        
-        [HttpGet]
-        public IEnumerable<Type> All()
-        {
-            return _db.Types;
         }
 
         [HttpGet]
-        public Type Id(int id)
-        {
-            return _db.Types.FirstOrDefault(f => f.Id == id);
-        }
+        public IEnumerable<Type> All() => _repo.AllTypes;
+
+        [HttpGet]
+        public Type Id(long id) => _repo.GetTypeById(id);
+
+        /*[HttpGet]
+        public IEnumerable<Expense> Expenses(long id) => _repo.GetExpensesByType(id);*/
     }
 }

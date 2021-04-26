@@ -6,7 +6,8 @@ namespace Project_66bit.Interfaces
     public interface ICategories
     {
         IEnumerable<Category> AllCategories { get; }
-        IEnumerable<Category> GetCategoriesByType(int typeId);
-        Category GetCategoryById(int categoryId);
+        IEnumerable<Category> GetCategoriesByType(long typeId);
+        IEnumerable<Category> GetCategoriesByType(Type type);
+        Category GetCategoryById(long categoryId);
     }
 }

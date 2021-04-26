@@ -64,7 +64,7 @@ export const MyExpenses = (props) => {
                                 </Modal>
 
                                 <h4 className="card-title">Данные о моих затратах</h4>
-                                <h6 className="card-subtitle">Не знаю, что тут можно написать, но пусть будет</h6>
+                                <h6 className="card-subtitle">*дополнительная информация*</h6>
 
                                 <button className="btn btn-success" onClick={() => setModalActive(true)}>Добавить затрату</button>
 

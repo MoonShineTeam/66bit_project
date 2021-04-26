@@ -25,8 +25,5 @@ namespace Project_66bit.Controllers
 
         [HttpGet]
         public Type Id(long id) => _repo.GetTypeById(id);
-
-        /*[HttpGet]
-        public IEnumerable<Expense> Expenses(long id) => _repo.GetExpensesByType(id);*/
     }
 }
